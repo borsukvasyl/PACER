@@ -1,4 +1,4 @@
-class PriorityQueue():
+class PriorityQueue:
     def __init__(self):
         """
         elements: list(tuple)
@@ -50,4 +50,3 @@ if __name__ == "__main__":
     element2 = (1, 2)
     pq.put(element2)
     print(pq.get())
-
