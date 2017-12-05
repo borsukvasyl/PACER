@@ -1,4 +1,5 @@
 from priority_queue import PriorityQueue
+from compact_states.compact_states import CompactStates
 
 
 class PACER(object):
@@ -21,6 +22,7 @@ class PACER(object):
         Finds topk routes.
         :return: ---
         """
+        compact_states = CompactStates()
         # recursive call of _find_topk_routes
         pass
 
@@ -30,10 +32,10 @@ class PACER(object):
         :return: ---
         """
 
-    def find_gain(self, points):
+    def find_gain(self, nodes):
         """
         Computes gain of given POIs.
-        :param points: set of POIs
+        :param nodes: set of POIs
         :return: ---
         """
         pass
@@ -46,14 +48,23 @@ class PACER(object):
         """
         pass
 
-    def pruning1(self, points, point):
+    def pruning1(self, compact_states, nodes, node):
         """
         PACER's pruning-1.
-        :param points: set of POIs
-        :param point: current POI
+        :param compact_states: CompactStates object
+        :param nodes: set of POIs
+        :param node: current POI
         :return: ---
         """
-        pass
+        routes = compact_states.get_compact_state(nodes).routes
+        best_route = routes[0]
+        best_cost = routes[0].cost_to_node(self.HIQ, node)
+        if len(routes) > 1:
+            for i in range(1, len(routes)):
+                if best_cost > routes[i].cost_to_node(self.HIQ, node):
+                    best_route = routes[i]
+                    best_cost = routes[i].cost_to_node(self.HIQ, node)
+        return best_route
 
     def pruning2(self):
         pass

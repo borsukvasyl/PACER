@@ -3,21 +3,24 @@ class CompactStates(object):
         """
         Initialize compact states dictionary
         """
-        self.compact_states = {}
+        self._compact_states = {}
 
-    def add_compact_state(self, points, compact_state):
+    def add_compact_state(self, nodes, compact_state):
         """
         Adds points: compact_state to compact states dictionary.
-        :param points: compact state's points set
+        :param nodes: compact state's NodesSet
         :param compact_state: CompactState object
         :return: None
         """
-        self.compact_states[str(points)] = compact_state
+        self._compact_states[nodes] = compact_state
 
-    def get_compact_state(self, points):
+    def get_compact_state(self, nodes):
         """
         Returns compact state of points set.
-        :param points: compact state's points set
+        :param nodes: compact state's NodesSet
         :return: CompactState
         """
-        return self.compact_states[str(points)]
+        return self._compact_states[nodes]
+
+    def __str__(self):
+        return str(self._compact_states)

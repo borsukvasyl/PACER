@@ -7,3 +7,6 @@ class Route(object):
         """
         self.route = route
         self.cost = cost
+
+    def cost_to_node(self, HIQ, node):
+        return self.cost + HIQ[self.route[-1]][node]
