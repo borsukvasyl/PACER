@@ -1,3 +1,6 @@
+from priority_queue import PriorityQueue
+
+
 class PACER(object):
     def __init__(self, Q, VQ, FIQ, HIQ):
         """
@@ -11,7 +14,7 @@ class PACER(object):
         self.VQ = VQ
         self.FIQ = FIQ
         self.HIQ = HIQ
-        #self.topk = PriorityQueue()
+        self.topk = PriorityQueue()
 
     def find_topk_routes(self):
         """
