@@ -99,5 +99,3 @@ class PACER(object):
                 continue
         return best_route
 
-    def pruning2(self):
-        pass

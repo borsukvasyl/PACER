@@ -18,7 +18,10 @@ class Route(object):
             raise ValueError("No edge between nodes")
 
     def cost_to_node(self, HIQ, to_node):
-        return self.cost + Route.travel_cost(HIQ, self.route[-1], to_node)
+        return self.cost + Route.travel_cost(HIQ, self.get_last_node(), to_node)
+
+    def get_last_node(self):
+        return self.route[-1]
 
     def extend_route(self, HIQ,  node):
         new_cost = self.cost_to_node(HIQ, node)
