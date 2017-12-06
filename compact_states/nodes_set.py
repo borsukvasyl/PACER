@@ -4,3 +4,8 @@ class NodesSet(set):
     """
     def __hash__(self):
         return hash(tuple(self))
+
+    def get_prefix(self, element):
+        result = {}
+        for val in self:
+

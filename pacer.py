@@ -27,19 +27,23 @@ class PACER(object):
         """
         topk = PriorityQueue()
         compact_states = CompactStates()
+
         initial_nodes = {self.Q.get_start()}
         initial_compact_state = CompactState(self.find_gain(initial_nodes),
                                              [Route([self.Q.get_start], 0)])
         compact_states.add_compact_state(initial_nodes, initial_compact_state)
+
+        self._find_topk_routes.topk = topk
+        self._find_topk_routes.compact_states = compact_states
         self._find_topk_routes()
         return topk
 
-    def _find_topk_routes(self):
+    def _find_topk_routes(self, nodes_set, prefix_nodes):
         """
         Finds topk routes.
         :return: ---
         """
-        pass
+        self._find_topk_routes()
 
     def _compute_aggregation_f(self, feature, nodes):
         result = 0
