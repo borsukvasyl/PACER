@@ -41,16 +41,16 @@ class PACER(object):
         Finds topk routes.
         :return: None
         """
+        print(previous_nodes)
         for i in prefix_nodes:
-            print(previous_nodes, i)
             nodes = NodesSet(previous_nodes | {i})
             print("nodes:", nodes)
             compact_state = CompactState(self.find_gain(nodes))
             for j in nodes:
                 nodes_j = NodesSet(nodes - {j})
-                print("nodes_j:", nodes_j, j)
                 dominating_route = self.pruning1(nodes_j, j)
                 route = dominating_route.extend_route(self.HIQ, j)
+                print(">nodes_{}:".format(j), nodes_j, dominating_route, route)
                 if route.cost_to_node(self.HIQ, self.Q.get_finish()) < self.Q.get_budget():
                     UP = 0  # self.pruning2()
                     if compact_state.gain + UP >= self.topk.get()[0]:
