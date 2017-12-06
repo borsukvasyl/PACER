@@ -79,6 +79,9 @@ class PACER(object):
             result += self.Q.get_preference()[feature] * self._compute_aggregation_f(feature, nodes)
         return result
 
+    def _find_delta_gain(self, set_1, set_2):
+        return self.find_gain(set_1) - self.find_gain(set_2)
+
     def pruning1(self, nodes, node):
         """
         PACER's pruning-1.
