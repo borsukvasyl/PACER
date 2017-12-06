@@ -29,12 +29,11 @@ class PACER(object):
         self.topk = PriorityQueue()
         self.compact_states = CompactStates()
 
-        initial_nodes = NodesSet({self.Q.get_start()})
-        initial_compact_state = CompactState(self.find_gain(initial_nodes),
+        initial_compact_state = CompactState(self.find_gain(NodesSet({self.Q.get_start()})),
                                              [Route([self.Q.get_start()], 0)])
-        self.compact_states.add_compact_state(initial_nodes, initial_compact_state)
+        self.compact_states.add_compact_state(NodesSet(), initial_compact_state)
 
-        self._find_topk_routes(initial_nodes, NodesSet(self.VQ - {self.Q.get_start()}))
+        self._find_topk_routes(NodesSet(), NodesSet(self.VQ - {self.Q.get_start()}))
         return self.topk
 
     def _find_topk_routes(self, previous_nodes, prefix_nodes):
