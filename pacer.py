@@ -31,6 +31,7 @@ class PACER(object):
         Finds topk routes.
         :return: ---
         """
+        pass
 
     def _compute_aggregation_f(self, feature, nodes):
         result = 0
