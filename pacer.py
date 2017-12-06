@@ -1,5 +1,8 @@
 from priority_queue import PriorityQueue
 from compact_states.compact_states import CompactStates
+from compact_states.compact_state import CompactState
+from compact_states.route import Route
+from compact_states.nodes_set import NodesSet
 
 
 class PACER(object):
@@ -15,16 +18,21 @@ class PACER(object):
         self.VQ = VQ
         self.FIQ = FIQ
         self.HIQ = HIQ
-        self.topk = PriorityQueue()
+        # self.topk = PriorityQueue()
 
     def find_topk_routes(self):
         """
         Finds topk routes.
-        :return: ---
+        :return: PriorityQueue
         """
+        topk = PriorityQueue()
         compact_states = CompactStates()
-        # recursive call of _find_topk_routes
-        pass
+        initial_nodes = {self.Q.get_start()}
+        initial_compact_state = CompactState(self.find_gain(initial_nodes),
+                                             [Route([self.Q.get_start], 0)])
+        compact_states.add_compact_state(initial_nodes, initial_compact_state)
+        self._find_topk_routes()
+        return topk
 
     def _find_topk_routes(self):
         """
