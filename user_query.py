@@ -1,8 +1,7 @@
 class Query:
-    def __init__(self, nodes_list_len, start, finish, budget, w=tuple([0.5 for _ in range(3)]),
-                 teta=0, alpha=1):
-        self._query = [start, finish, budget, w,
-                 teta, alpha]
+    def __init__(self, start, finish, budget,
+                 w=tuple([0.5 for _ in range(3)]), teta=0, alpha=1):
+        self._query = [start, finish, budget, w, teta, alpha]
 
     def get_start(self):
         return self._query[0]
