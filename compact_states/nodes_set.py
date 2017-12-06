@@ -6,6 +6,8 @@ class NodesSet(set):
         return hash(tuple(self))
 
     def get_prefix(self, element):
-        result = {}
+        result = NodesSet()
         for val in self:
-
+            if val < element:
+                result.add(val)
+        return result
