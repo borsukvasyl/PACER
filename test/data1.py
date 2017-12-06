@@ -1,8 +1,8 @@
 VQ = [0, 1, 2, 3, 5]
 # FIQ = {0: [(2, 1), (1, 0.7)],
 #        1: [(0, 1), (3, 0.8)]}
-FIQ = {0: {2: 1, 1: 0.7},
-       1: {0: 1, 3: 0.8}}
+FIQ = {0: [(2, 1), (1, 0.7)],
+       1: [(0, 1), (3, 0.8)]}
 HIQ = {0: {0: 0, 1: 12, 5: 12},
        1: {1: 0, 5: 4, 2: 5},
        2: {2: 0, 3: 4, 5: 5},
@@ -40,4 +40,5 @@ if __name__ == "__main__":
     import pacer
     import user_query
     pc = pacer.PACER(user_query.Query(1, 5, 13), VQ, FIQ, HIQ)
-    print(pc.pruning1(css, NodesSet({1, 2, 5}), 3).route)
+    print(pc.pruning1(css, NodesSet({1, 2, 5}), 0).route)
+    print(pc.find_gain(NodesSet({1, 2, 5})))

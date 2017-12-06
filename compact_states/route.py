@@ -12,7 +12,10 @@ class Route(object):
         from_node = self.route[-1]
         if to_node < from_node:
             from_node, to_node = to_node, from_node
-        return self.cost + HIQ[from_node][to_node]
+        try:
+            return self.cost + HIQ[from_node][to_node]
+        except KeyError:
+            raise ValueError("No edge between end of the tour end node")
 
     def extend_route(self, HIQ,  node):
         new_cost = self.cost_to_node(HIQ, node)
