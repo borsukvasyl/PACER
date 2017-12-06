@@ -102,3 +102,70 @@ class PACER(object):
                 continue
         return best_route
 
+    def pruning2(self, current_route):
+        # Find set U from page 6
+        remaining_budget = self._find_remaining_budget(self.Q.get_budget(), current_route.cost)
+        last_node_on_route = current_route.get_last_node()
+        unvisited_nodes_set = set(self.VQ).difference(set(current_route)).difference(set(self.Q.get_finish()))
+        valid_nodes_set_u = self._find_remaining_valid_nodes_set(last_node_on_route,
+                                                               unvisited_nodes_set, remaining_budget)
+
+        # Find lambda and l values
+        nodes_dict = {}
+        betas_dict = {}
+        for node in valid_nodes_set_u.union(self.Q.get_finish()):
+            beta = self._find_delta_gain(set(node), current_route) - \
+                self._find_delta_gain(set(), current_route)
+            betas_dict[node] = beta
+            c = self._find_node_set_cost(node, current_route.get_last_node())
+            r = beta // c
+            nodes_dict[node] = r
+        sorted_nodes = sorted(nodes_dict.keys(), key=nodes_dict.get, reverse=True)
+        current = 0
+        current_sum = 0
+        #TODO: change c_of_last...
+        c_of_last_node_in_route = 0
+        B = remaining_budget - c_of_last_node_in_route
+        while current < len(sorted_nodes) and current_sum <= B:
+            current_sum += self._find_node_set_cost(sorted_nodes[current], current_route.get_last_node())
+            current += 1
+        l = current
+        l_c = self._find_node_set_cost(sorted_nodes[current], current_route.get_last_node())
+        lammbda = B - (current_sum - l_c) // l_c
+
+        # Find UP value
+        UP = 0
+        j = 0
+        while j < l - 1:
+            UP += betas_dict[sorted_nodes[j]]
+            j += 1
+        UP += lammbda * betas_dict[sorted_nodes[j]]
+        return UP
+
+
+    @staticmethod
+    def _find_remaining_budget(travel_budget, path_cost):
+        return travel_budget - path_cost
+
+    def _find_remaining_valid_nodes_set(self, last_node_on_route, unvisited_nodes_set, remaining_budget):
+        result_set = set()
+        for node in unvisited_nodes_set:
+            finish = self.Q.get_finish()
+            if Route.travel_cost(self.HIQ, last_node_on_route, node) + \
+                Route.travel_cost(self.HIQ, node, finish) <= remaining_budget:
+                result_set.add(node)
+
+        return result_set
+
+    def _find_node_set_cost(self, node, last_node_in_route):
+        try:
+            incoming_travel_cost = self.HIQ[last_node_in_route][node]
+        except KeyError:
+            incoming_travel_cost = 0
+
+        try:
+            outcoming_travel_cost = self.HIQ[node][self.Q.get_finish()]
+        except KeyError:
+            outcoming_travel_cost = 0
+
+        return (incoming_travel_cost + outcoming_travel_cost) // 2
