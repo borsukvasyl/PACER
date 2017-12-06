@@ -1,4 +1,4 @@
-VQ = [0, 1, 2, 3, 5]
+VQ = {0, 1, 2, 3, 5}
 # FIQ = {0: [(2, 1), (1, 0.7)],
 #        1: [(0, 1), (3, 0.8)]}
 FIQ = {0: [(2, 1), (1, 0.7)],
@@ -40,5 +40,8 @@ if __name__ == "__main__":
     import pacer
     import user_query
     pc = pacer.PACER(user_query.Query(1, 5, 13), VQ, FIQ, HIQ)
-    print(pc.pruning1(css, NodesSet({1, 2, 5}), 0).route)
+    pc.compact_states = css
+    print(pc.pruning1(NodesSet({1, 2, 5}), 0).route)
     print(pc.find_gain(NodesSet({1, 2, 5})))
+
+    pc.find_topk_routes()

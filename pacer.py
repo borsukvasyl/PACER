@@ -18,32 +18,46 @@ class PACER(object):
         self.VQ = VQ
         self.FIQ = FIQ
         self.HIQ = HIQ
-        # self.topk = PriorityQueue()
+        self.topk = PriorityQueue()
+        self.compact_states = CompactStates()
 
     def find_topk_routes(self):
         """
         Finds topk routes.
         :return: PriorityQueue
         """
-        topk = PriorityQueue()
-        compact_states = CompactStates()
+        self.topk = PriorityQueue()
+        self.compact_states = CompactStates()
 
-        initial_nodes = {self.Q.get_start()}
+        initial_nodes = NodesSet({self.Q.get_start()})
         initial_compact_state = CompactState(self.find_gain(initial_nodes),
-                                             [Route([self.Q.get_start], 0)])
-        compact_states.add_compact_state(initial_nodes, initial_compact_state)
+                                             [Route([self.Q.get_start()], 0)])
+        self.compact_states.add_compact_state(initial_nodes, initial_compact_state)
 
-        self._find_topk_routes.topk = topk
-        self._find_topk_routes.compact_states = compact_states
-        self._find_topk_routes()
-        return topk
+        self._find_topk_routes(initial_nodes, NodesSet(self.VQ - {self.Q.get_start()}))
+        return self.topk
 
-    def _find_topk_routes(self, nodes_set, prefix_nodes):
+    def _find_topk_routes(self, previous_nodes, prefix_nodes):
         """
         Finds topk routes.
-        :return: ---
+        :return: None
         """
-        self._find_topk_routes()
+        for i in prefix_nodes:
+            print(previous_nodes, i)
+            nodes = NodesSet(previous_nodes | {i})
+            print("nodes:", nodes)
+            compact_state = CompactState(self.find_gain(nodes))
+            for j in nodes:
+                nodes_j = NodesSet(nodes - {j})
+                print("nodes_j:", nodes_j, j)
+                dominating_route = self.pruning1(nodes_j, j)
+                route = dominating_route.extend_route(self.HIQ, j)
+                if route.cost_to_node(self.HIQ, self.Q.get_finish()) < self.Q.get_budget():
+                    UP = 0  # self.pruning2()
+                    if compact_state.gain + UP >= self.topk.get()[0]:
+                        compact_state.add_route(route)
+            # updating topk
+            self._find_topk_routes(nodes, prefix_nodes.get_prefix(i))
 
     def _compute_aggregation_f(self, feature, nodes):
         result = 0
@@ -66,7 +80,7 @@ class PACER(object):
             result += self.Q.get_preference()[feature] * self._compute_aggregation_f(feature, nodes)
         return result
 
-    def pruning1(self, compact_states, nodes, node):
+    def pruning1(self, nodes, node):
         """
         PACER's pruning-1.
         :param compact_states: CompactStates object
@@ -74,7 +88,7 @@ class PACER(object):
         :param node: current POI
         :return: ---
         """
-        routes = compact_states.get_compact_state(nodes).routes
+        routes = self.compact_states.get_compact_state(nodes).routes
         best_route = None
         best_cost = None
         for i in range(0, len(routes)):

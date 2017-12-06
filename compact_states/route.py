@@ -24,3 +24,9 @@ class Route(object):
         new_cost = self.cost_to_node(HIQ, node)
         new_route = self.route + [node]
         return Route(new_route, new_cost)
+
+    def __str__(self):
+        return "cost={}, route={}".format(self.cost, self.route)
+
+    def __repr__(self):
+        return self.__str__()
