@@ -55,10 +55,10 @@ class PACER(object):
                 route = dominating_route.extend_route(self.HIQ, j)
                 print(">nodes_{}:".format(j), nodes_j, dominating_route, route)
                 if route.cost_to_node(self.HIQ, self.Q.get_finish()) < self.Q.get_budget():
-                    compact_state.add_route(route)  # remove this line
-                    # UP = 0  # self.pruning2()
+                    UP = self.pruning2(route)
                     # if compact_state.gain + UP >= self.topk.get()[0]:
                     #     compact_state.add_route(route)
+                    compact_state.add_route(route)  # to remove #
             # updating topk
             self.compact_states.add_compact_state(nodes, compact_state)
             self._find_topk_routes(nodes, prefix_nodes.get_prefix(i))
