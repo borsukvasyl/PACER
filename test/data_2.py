@@ -1,0 +1,17 @@
+if __name__ == "__main__":
+    from compact_states.route import Route
+    from pacer import PACER
+    from user_query import Query
+    import data1 as d1
+
+    route = Route([1], 1)
+    route1 = route.extend_route(d1.HIQ, 2)
+    route2 = route.extend_route(d1.HIQ, 5)
+
+    Q = Query(1, 5, 13)
+    pacer_object = PACER(Q, d1.VQ, d1.FIQ, d1.HIQ)
+    UP = pacer_object.pruning2(route1)
+    print("UP=", UP)
+    route1_gain = pacer_object.find_gain(set(route1.route))
+    print("route1 gain =", route1_gain)
+    print(route1_gain + UP)
