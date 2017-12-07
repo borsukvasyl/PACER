@@ -1,3 +1,5 @@
+import math
+
 from priority_queue import PriorityQueue
 from compact_states.compact_states import CompactStates
 from compact_states.compact_state import CompactState
@@ -103,43 +105,58 @@ class PACER(object):
         return best_route
 
     def pruning2(self, current_route):
-        # Find set U from page 6
+        # Find U: set of remaining nodes travel cost to which is less
+        # than remaining budget
         remaining_budget = self._find_remaining_budget(self.Q.get_budget(), current_route.cost)
         last_node_on_route = current_route.get_last_node()
-        unvisited_nodes_set = set(self.VQ).difference(set(current_route)).difference(set(self.Q.get_finish()))
+        unvisited_nodes_set = set(self.VQ).difference(set(current_route.route)).\
+            difference({self.Q.get_finish()})
         valid_nodes_set_u = self._find_remaining_valid_nodes_set(last_node_on_route,
                                                                unvisited_nodes_set, remaining_budget)
 
-        # Find lambda and l values
-        nodes_dict = {}
+        # Find each node r and beta value
+        rs_dict = {}
         betas_dict = {}
         for node in valid_nodes_set_u.union(self.Q.get_finish()):
-            beta = self._find_delta_gain(set(node), current_route) - \
+            beta = self._find_delta_gain({node}, set(current_route.route)) - \
                 self._find_delta_gain(set(), current_route)
             betas_dict[node] = beta
             c = self._find_node_set_cost(node, current_route.get_last_node())
             r = beta // c
-            nodes_dict[node] = r
-        sorted_nodes = sorted(nodes_dict.keys(), key=nodes_dict.get, reverse=True)
-        current = 0
-        current_sum = 0
-        #TODO: change c_of_last...
-        c_of_last_node_in_route = 0
+            rs_dict[node] = r
+        sorted_nodes = sorted(rs_dict.keys(), key=rs_dict.get, reverse=True)
+
+        # Find lambda and l values required
+        # for computation of UP value
+        current = current_sum = 0
+        sorted_valid_nodes = []
+        c_of_last_node_in_route = self._find_node_set_cost(last_node_on_route,
+                                                            last_node_on_route)
+        c_of_last_node_in_route = c_of_last_node_in_route \
+            if c_of_last_node_in_route != math.inf else 0
         B = remaining_budget - c_of_last_node_in_route
         while current < len(sorted_nodes) and current_sum <= B:
-            current_sum += self._find_node_set_cost(sorted_nodes[current], current_route.get_last_node())
+            node_set_cost = self._find_node_set_cost(sorted_nodes[current],
+                                                    last_node_on_route)
+            if node_set_cost == math.inf:
+                current += 1
+                continue
+            current_sum += node_set_cost
+            sorted_valid_nodes.append(sorted_nodes[current])
             current += 1
-        l = current
-        l_c = self._find_node_set_cost(sorted_nodes[current], current_route.get_last_node())
-        lammbda = B - (current_sum - l_c) // l_c
+        l = len(sorted_valid_nodes)
+        l_c = self._find_node_set_cost(sorted_nodes[current], last_node_on_route)
+        l_c = l_c if l_c != math.inf else remaining_budget - \
+                                          self._find_node_set_cost(sorted_valid_nodes[-1], last_node_on_route) + 1
+        lammbda = (B - current_sum) // l_c
 
         # Find UP value
         UP = 0
         j = 0
         while j < l - 1:
-            UP += betas_dict[sorted_nodes[j]]
+            UP += betas_dict[sorted_valid_nodes[j]]
             j += 1
-        UP += lammbda * betas_dict[sorted_nodes[j]]
+        UP += lammbda * betas_dict[sorted_valid_nodes[j]]
         return UP
 
 
@@ -159,13 +176,13 @@ class PACER(object):
 
     def _find_node_set_cost(self, node, last_node_in_route):
         try:
-            incoming_travel_cost = self.HIQ[last_node_in_route][node]
-        except KeyError:
-            incoming_travel_cost = 0
+            incoming_travel_cost = Route.travel_cost(self.HIQ, last_node_in_route, node)
+        except ValueError:
+            incoming_travel_cost = math.inf
 
         try:
-            outcoming_travel_cost = self.HIQ[node][self.Q.get_finish()]
-        except KeyError:
-            outcoming_travel_cost = 0
+            outcoming_travel_cost = Route.travel_cost(self.HIQ, node, self.Q.get_finish())
+        except ValueError:
+            outcoming_travel_cost = math.inf
 
         return (incoming_travel_cost + outcoming_travel_cost) // 2
