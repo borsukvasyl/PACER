@@ -1,7 +1,7 @@
 if __name__ == "__main__":
-    from compact_states.route import Route
-    from pacer import PACER
-    from user_query import Query
+    from source.compact_states.route import Route
+    from source.pacer import PACER
+    from source import Query
     import data1 as d1
 
     route = Route([1], 1)

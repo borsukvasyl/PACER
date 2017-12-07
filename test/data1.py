@@ -11,10 +11,10 @@ HIQ = {0: {0: 0, 1: 12, 5: 12},
 
 
 if __name__ == "__main__":
-    from compact_states.compact_states import CompactStates
-    from compact_states.compact_state import CompactState
-    from compact_states.route import Route
-    from compact_states.nodes_set import NodesSet
+    from source.compact_states.compact_states import CompactStates
+    from source.compact_states.compact_state import CompactState
+    from source.compact_states.nodes_set import NodesSet
+    from source.compact_states.route import Route
 
     css = CompactStates()
 
@@ -37,8 +37,8 @@ if __name__ == "__main__":
     css.add_compact_state(nodes_set2, cs2)
     print(css)
 
-    import pacer
-    import user_query
+    from source import user_query, pacer
+
     pc = pacer.PACER(user_query.Query(1, 5, 24), VQ, FIQ, HIQ)
     pc.compact_states = css
     #print(pc.pruning1(NodesSet({1, 2, 5}), 0).route)

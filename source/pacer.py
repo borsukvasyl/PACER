@@ -1,10 +1,11 @@
 import math
 
-from priority_queue import PriorityQueue
-from compact_states.compact_states import CompactStates
-from compact_states.compact_state import CompactState
-from compact_states.route import Route
-from compact_states.nodes_set import NodesSet
+from source.compact_states.compact_state import CompactState
+from source.compact_states.compact_states import CompactStates
+from source.compact_states.nodes_set import NodesSet
+from source.queue.priority_queue import PriorityQueue
+
+from source.compact_states.route import Route
 
 
 class PACER(object):
