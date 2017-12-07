@@ -118,6 +118,7 @@ class PACER(object):
         :param current_route: object of class Route
         :return: float
         """
+        UP = 0
         # Find U: set of remaining nodes travel cost to which is less
         # than remaining budget
         remaining_budget = self._find_remaining_budget(self.Q.get_budget(), current_route.cost)
@@ -132,7 +133,7 @@ class PACER(object):
         betas_dict = {}
         for node in valid_nodes_set_u.union({self.Q.get_finish()}):
             beta = self._find_delta_gain({node}, set(current_route.route)) - \
-                   self._find_delta_gain(set(), current_route.route) + 1  # small improvement
+                   self._find_delta_gain(set(), current_route.route)
             betas_dict[node] = beta
             c = self._find_node_set_cost(node, current_route.get_last_node())
             r = beta / c
@@ -157,24 +158,27 @@ class PACER(object):
             current_sum += node_set_cost
             sorted_valid_nodes.append(sorted_nodes[current])
             current += 1
-        l = len(sorted_valid_nodes)
-        if current_sum > B:
-            l_node = sorted_valid_nodes.pop()
-            current_sum -= self._find_node_set_cost(l_node, last_node_on_route)
-            bound = l - 1
-        else:
-            l_node = sorted_valid_nodes[-1]
-            bound = l
-        l_c = self._find_node_set_cost(l_node, last_node_on_route)
-        lammbda = (B - current_sum) / l_c
 
-        # Find UP value
-        UP = 0
-        j = 0
-        while j < bound:
-            UP += betas_dict[sorted_valid_nodes[j]]
-            j += 1
-        UP += lammbda * betas_dict[l_node]
+        if sorted_valid_nodes:
+            l = len(sorted_valid_nodes)
+            if current_sum > B:
+                l_node = sorted_valid_nodes.pop()
+                current_sum -= self._find_node_set_cost(l_node, last_node_on_route)
+                bound = l - 1
+            else:
+                l_node = sorted_valid_nodes[-1]
+                bound = l
+
+            l_c = self._find_node_set_cost(l_node, last_node_on_route)
+            lammbda = (B - current_sum) / l_c
+
+            # Find UP value
+            j = 0
+            while j < bound:
+                UP += betas_dict[sorted_valid_nodes[j]]
+                j += 1
+            UP += lammbda * betas_dict[l_node]
+
         return UP
 
     @staticmethod
@@ -223,4 +227,4 @@ class PACER(object):
         except ValueError:
             outcoming_travel_cost = math.inf
 
-        return (incoming_travel_cost + outcoming_travel_cost) / 2
+        return (incoming_travel_cost + outcoming_travel_cost) / 2 + 1.0

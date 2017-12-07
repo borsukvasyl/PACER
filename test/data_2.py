@@ -8,7 +8,7 @@ if __name__ == "__main__":
     route1 = route.extend_route(d1.HIQ, 2)
     route2 = route.extend_route(d1.HIQ, 5)
 
-    Q = Query(1, 5, 13)
+    Q = Query(5, 1, 13)
     pacer_object = PACER(Q, d1.VQ, d1.FIQ, d1.HIQ)
     UP = pacer_object.pruning2(route1)
     print("UP=", UP)
