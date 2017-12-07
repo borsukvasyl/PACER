@@ -43,21 +43,24 @@ class PACER(object):
         Finds topk routes.
         :return: None
         """
-        print(previous_nodes)
         for i in prefix_nodes:
             nodes = NodesSet(previous_nodes | {i})
-            print("nodes:", nodes)
+            print("nodes: {}, previous: {}, prefix: {}".format(nodes, previous_nodes, prefix_nodes))
             compact_state = CompactState(self.find_gain(nodes))
             for j in nodes:
                 nodes_j = NodesSet(nodes - {j})
                 dominating_route = self.pruning1(nodes_j, j)
+                if dominating_route is None:
+                    continue
                 route = dominating_route.extend_route(self.HIQ, j)
                 print(">nodes_{}:".format(j), nodes_j, dominating_route, route)
                 if route.cost_to_node(self.HIQ, self.Q.get_finish()) < self.Q.get_budget():
-                    UP = 0  # self.pruning2()
-                    if compact_state.gain + UP >= self.topk.get()[0]:
-                        compact_state.add_route(route)
+                    compact_state.add_route(route)  # remove this line
+                    # UP = 0  # self.pruning2()
+                    # if compact_state.gain + UP >= self.topk.get()[0]:
+                    #     compact_state.add_route(route)
             # updating topk
+            self.compact_states.add_compact_state(nodes, compact_state)
             self._find_topk_routes(nodes, prefix_nodes.get_prefix(i))
 
     def _compute_aggregation_f(self, feature, nodes):
@@ -99,8 +102,11 @@ class PACER(object):
             try:
                 if best_route is None or best_cost > routes[i].cost_to_node(self.HIQ, node):
                     best_route = routes[i]
-                    best_cost = routes[i].cost_to_node(self.HIQ, node)
-            except ValueError:  # no edge to node
+                    try:
+                        best_cost = routes[i].cost_to_node(self.HIQ, node)
+                    except ValueError:
+                        best_route = None
+            except ValueError:  # no edge
                 continue
         return best_route
 
