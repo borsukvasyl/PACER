@@ -17,7 +17,7 @@ class FeatureIndex:
         self.number_of_features = n
         self._features = dict([(i, []) for i in range(n)])
 
-    def get_FI(self):
+    def get_fi(self):
         return self._features
 
     def add_element(self, feature, element):
@@ -80,7 +80,7 @@ class FeatureIndex:
 
         # remove useless features
         for feature in features_to_delete:
-            del(self._features[feature])
+            del (self._features[feature])
 
     def _set_features(self, features):
         """
@@ -90,11 +90,12 @@ class FeatureIndex:
         """
         self._features = features
 
+
 if __name__ == "__main__":
     fi = FeatureIndex(3)
     fi.add_element(0, (1, 0.6))
     fi.add_element(1, (2, 0.1))
     fi.add_element(2, (3, 1.0))
-    print(fi.get_FI())
+    print(fi.get_fi())
     fi.cut(0, 5, (0.6, 0.1, 0.5), (0.5, 0, 0.5))
-    print(fi.get_FI())
+    print(fi.get_fi())
