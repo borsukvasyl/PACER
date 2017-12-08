@@ -18,7 +18,12 @@ class FeatureIndex:
         self._features = dict([(i, []) for i in range(n)])
 
     def get_fi(self):
-        return self._features
+        fi = {}
+        for feature in self._features:
+            fi[feature] = list(map(lambda node: (node.get_node(), node.get_value()),
+                                   self._features[feature]))
+
+        return fi
 
     def add_element(self, feature, element):
         """
@@ -34,26 +39,15 @@ class FeatureIndex:
         self._features.get(feature).append(fi_element)
         self._features.get(feature).sort(key=lambda x: x.get_value(), reverse=True)
 
-    def remove_element(self, feature, element):
+    def find_valid_nodes(self, start, finish, feature_vector, filtering_vector):
         """
-
-        :param feature: index
-        :param element: tuple:(node_index, feature_value)
-        :return:
-        """
-        if feature not in self._features:
-            raise KeyError("Invalid feature")
-
-        self._features.get(feature).remove(element)
-
-    def cut(self, start, finish, feature_vector, filtering_vector):
-        """
-        Reduces feature index(FI) to FIQ due to user query
+        Reduce feature index(FI) to FIQ due to user query
+        Find set of nodes(pois) that are useful due to query
         :param start: index of start poi
         :param finish: index of finish poi
         :param feature_vector: tuple of features' ratings preferences
         :param filtering_vector: tuple of filtering(pois with lower ratings will be cut off)
-        :return:
+        :return: set of nodes' indices
         """
         # remove useless features
         query_features = list(filter(lambda x: feature_vector[x] > 0, self._features.keys()))
@@ -62,7 +56,9 @@ class FeatureIndex:
         self._set_features(query_features_dict)
 
         # remove useless nodes in each feature
+        # create set of used nodes
         features_to_delete = set()
+        useful_nodes = set()
         index = 0
         for feature in self._features:
             feature_filter_value = filtering_vector[index]
@@ -74,6 +70,7 @@ class FeatureIndex:
                                )
             if query_nodes:
                 self._features[feature] = query_nodes
+                useful_nodes = useful_nodes.union(set(list(map(lambda x: x.get_node(), query_nodes))))
             else:
                 features_to_delete.add(feature)
             index += 1
@@ -81,6 +78,8 @@ class FeatureIndex:
         # remove useless features
         for feature in features_to_delete:
             del (self._features[feature])
+
+        return useful_nodes
 
     def _set_features(self, features):
         """
@@ -97,5 +96,6 @@ if __name__ == "__main__":
     fi.add_element(1, (2, 0.1))
     fi.add_element(2, (3, 1.0))
     print(fi.get_fi())
-    fi.cut(0, 5, (0.6, 0.1, 0.5), (0.5, 0, 0.5))
+    v_nodes = fi.find_valid_nodes(0, 5, (0.6, 0.1, 0.5), (0.5, 0, 0.5))
+    print(v_nodes)
     print(fi.get_fi())
