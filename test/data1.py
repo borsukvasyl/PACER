@@ -14,7 +14,7 @@ if __name__ == "__main__":
     from source.compact_states.compact_states import CompactStates
     from source.compact_states.compact_state import CompactState
     from source.compact_states.nodes_set import NodesSet
-    from source.compact_states.route import Route
+    from source.graph.route import Route
 
     css = CompactStates()
 

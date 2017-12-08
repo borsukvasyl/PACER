@@ -1,5 +1,5 @@
 if __name__ == "__main__":
-    from source.compact_states.route import Route
+    from source.graph.route import Route
     from source.pacer import PACER
     from source import Query
     import data1 as d1

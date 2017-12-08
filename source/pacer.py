@@ -3,9 +3,8 @@ import math
 from source.compact_states.compact_state import CompactState
 from source.compact_states.compact_states import CompactStates
 from source.compact_states.nodes_set import NodesSet
+from source.graph.route import Route
 from source.queue.priority_queue import PriorityQueue
-
-from source.compact_states.route import Route
 
 
 class PACER(object):
