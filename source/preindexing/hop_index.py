@@ -3,6 +3,11 @@ class HopIndex:
     The same approach as for Feature Index
     Keeps dict of nodes indices as keys and adjacent nodes and cost to them
     as values
+    IN: list of integers corresponding to indexes of nodes
+    (they are retrieved by FeatureIndex.find_valid_nodes() method)
+    OUT: dict:
+    keys: nodes indexes,
+    values: dict(key: node index, value: cost to this node)
     """
     class NodeCost:
         def __init__(self, i, d):
