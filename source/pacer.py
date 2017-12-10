@@ -53,7 +53,8 @@ class PACER(object):
         for i in prefix_nodes:
             nodes = NodesSet(previous_nodes | {i})
             compact_state = CompactState(self.find_gain(nodes))
-            print("nodes: {}, previous: {}, prefix: {}".format(nodes, previous_nodes, prefix_nodes))
+
+            unfinished_routes = []
 
             # computing best routes
             for j in nodes:
@@ -63,16 +64,23 @@ class PACER(object):
                 if dominating_route is None:
                     continue
                 route = dominating_route.extend_route(self.HIQ, j)
-                print(">nodes_{}:".format(j), nodes_j, dominating_route, route)
+
+                if self.Q.get_finish() not in self.HIQ[route.get_last_node()]:
+                    unfinished_routes.append(route)
+                    continue
 
                 # checking whether gain of this route is valid (pruning-2)
                 if route.cost_to_node(self.HIQ, self.Q.get_finish()) < self.Q.get_budget():
                     UP = self.pruning2(route)
                     if compact_state.gain + UP >= self._get_topk_kth_element():
                         compact_state.add_route(route)
-                    #compact_state.add_route(route)  # to remove #
+
             self.updata_topk(compact_state)
+
+            for route in unfinished_routes:
+                compact_state.add_route(route)
             self.compact_states.add_compact_state(nodes, compact_state)
+
             self._find_topk_routes(nodes, prefix_nodes.get_prefix(i))
 
     def _compute_aggregation_f(self, feature, nodes):
