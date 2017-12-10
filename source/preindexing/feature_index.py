@@ -1,4 +1,9 @@
 class FeatureIndex:
+    """
+    Keeps set of nodes for each feature
+    After initialization is empty
+    Is constructed by adding nodes with its feature value
+    """
     class NodeFeatureValue:
         def __init__(self, i, v):
             self._node = i
@@ -18,6 +23,9 @@ class FeatureIndex:
         self._features = dict([(i, []) for i in range(n)])
 
     def get_fi(self):
+        """
+        :return: Feature index as dict of features as keys and list of nodes as values
+        """
         fi = {}
         for feature in self._features:
             fi[feature] = list(map(lambda node: (node.get_node(), node.get_value()),

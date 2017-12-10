@@ -1,4 +1,9 @@
 class HopIndex:
+    """
+    The same approach as for Feature Index
+    Keeps dict of nodes indices as keys and adjacent nodes and cost to them
+    as values
+    """
     class NodeCost:
         def __init__(self, i, d):
             self._node = i
