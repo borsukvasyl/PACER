@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     from source import user_query, pacer
 
-    pc = pacer.PACER(user_query.Query(1, 5, 24), VQ, FIQ, HIQ)
+    pc = pacer.PACER(user_query.Query(1, 3, 28), VQ, FIQ, HIQ)
     pc.compact_states = css
     # print(pc.pruning1(NodesSet({1, 2, 5}), 0).route)
     # print(pc.find_gain(NodesSet({1, 2, 5})))
