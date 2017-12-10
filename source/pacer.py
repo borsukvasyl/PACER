@@ -39,7 +39,7 @@ class PACER(object):
                                              [Route([self.Q.get_start()], 0)])
         self.compact_states.add_compact_state(NodesSet(), initial_compact_state)
 
-        self._find_topk_routes(NodesSet(), NodesSet(self.VQ - {self.Q.get_start()}))
+        self._find_topk_routes(NodesSet(), NodesSet(self.VQ - {self.Q.get_start(), self.Q.get_finish()}))
         return self.topk
 
     def _find_topk_routes(self, previous_nodes, prefix_nodes):
