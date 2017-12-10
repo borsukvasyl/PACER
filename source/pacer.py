@@ -8,18 +8,21 @@ from source.queue.priority_queue import PriorityQueue
 
 
 class PACER(object):
-    def __init__(self, Q, VQ, FIQ, HIQ):
+    def __init__(self, Q, VQ, FIQ, HIQ, k=10):
         """
         Initializing PACER.
         :param Q: Queue
         :param VQ: POI candidates
         :param FIQ: Feature Index
         :param HIQ: 2-Hop Index
+        :param k: number of elements in priority queue
         """
         self.Q = Q
         self.VQ = VQ
         self.FIQ = FIQ
         self.HIQ = HIQ
+        self.k = k
+
         self.topk = PriorityQueue()
         self.compact_states = CompactStates()
 
@@ -31,6 +34,7 @@ class PACER(object):
         self.topk = PriorityQueue()
         self.compact_states = CompactStates()
 
+        # setting initial compact state
         initial_compact_state = CompactState(self.find_gain(NodesSet({self.Q.get_start()})),
                                              [Route([self.Q.get_start()], 0)])
         self.compact_states.add_compact_state(NodesSet(), initial_compact_state)
@@ -41,29 +45,43 @@ class PACER(object):
     def _find_topk_routes(self, previous_nodes, prefix_nodes):
         """
         Finds topk routes.
+        :param previous_nodes: set of previous POIs
+        :param prefix_nodes: available POIs
         :return: None
         """
+        # extending previous_nodes, by one node from prefix_nodes
         for i in prefix_nodes:
             nodes = NodesSet(previous_nodes | {i})
-            print("nodes: {}, previous: {}, prefix: {}".format(nodes, previous_nodes, prefix_nodes))
             compact_state = CompactState(self.find_gain(nodes))
+            print("nodes: {}, previous: {}, prefix: {}".format(nodes, previous_nodes, prefix_nodes))
+
+            # computing best routes
             for j in nodes:
+                # finding best route for ending point in j (pruning-1)
                 nodes_j = NodesSet(nodes - {j})
                 dominating_route = self.pruning1(nodes_j, j)
                 if dominating_route is None:
                     continue
                 route = dominating_route.extend_route(self.HIQ, j)
                 print(">nodes_{}:".format(j), nodes_j, dominating_route, route)
+
+                # checking whether gain of this route is valid (pruning-2)
                 if route.cost_to_node(self.HIQ, self.Q.get_finish()) < self.Q.get_budget():
                     UP = self.pruning2(route)
-                    # if compact_state.gain + UP >= self.topk.get()[0]:
-                    #     compact_state.add_route(route)
-                    compact_state.add_route(route)  # to remove #
-            # updating topk
+                    if compact_state.gain + UP >= self._get_topk_kth_element():
+                        compact_state.add_route(route)
+                    #compact_state.add_route(route)  # to remove #
+            self.updata_topk(compact_state)
             self.compact_states.add_compact_state(nodes, compact_state)
             self._find_topk_routes(nodes, prefix_nodes.get_prefix(i))
 
     def _compute_aggregation_f(self, feature, nodes):
+        """
+        Computes feature aggregation function.
+        :param feature: computing feature
+        :param nodes: set of nodes
+        :return: feature aggregation function result
+        """
         result = 0
         rank = 1
         elements = self.FIQ[feature]
@@ -96,7 +114,6 @@ class PACER(object):
     def pruning1(self, nodes, node):
         """
         PACER's pruning-1.
-        :param compact_states: CompactStates object
         :param nodes: set of POIs
         :param node: current POI
         :return: ---
@@ -234,3 +251,12 @@ class PACER(object):
             outcoming_travel_cost = math.inf
 
         return (incoming_travel_cost + outcoming_travel_cost) / 2 + 1.0
+
+    def _get_topk_kth_element(self):
+        if self.topk.size() < self.k:
+            return 0
+        return self.topk.get_by_index_priority(self.k - 1)[1]
+
+    def updata_topk(self, compact_state):
+        for route in compact_state.routes:
+            self.topk.put((route, compact_state.gain))

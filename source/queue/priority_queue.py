@@ -6,6 +6,9 @@ class PriorityQueue:
         """
         self.elements = []
 
+    def size(self):
+        return len(self.elements)
+
     def put(self, element):
         """
         :param element: tuple(data, rank)
@@ -16,6 +19,9 @@ class PriorityQueue:
 
     def get(self):
         return self.elements[0]
+
+    def get_by_index_priority(self, index):
+        return self.elements[index]
 
     def delete(self):
         return self.elements.pop(0)

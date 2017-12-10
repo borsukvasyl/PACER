@@ -41,11 +41,14 @@ if __name__ == "__main__":
 
     pc = pacer.PACER(user_query.Query(1, 5, 24), VQ, FIQ, HIQ)
     pc.compact_states = css
-    #print(pc.pruning1(NodesSet({1, 2, 5}), 0).route)
-    print(pc.find_gain(NodesSet({1, 2, 5})))
+    # print(pc.pruning1(NodesSet({1, 2, 5}), 0).route)
+    # print(pc.find_gain(NodesSet({1, 2, 5})))
 
-    pc.find_topk_routes()
+    pq = pc.find_topk_routes()
 
     a = pc.compact_states._compact_states
     for i in a:
         print(">>>>>>>node {}: {}".format(i, a[i].routes))
+
+    top_routes = [pq.delete() for _ in range(pq.size())]
+    print(top_routes)
