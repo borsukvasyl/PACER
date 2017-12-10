@@ -3,6 +3,10 @@ class FeatureIndex:
     Keeps set of nodes for each feature
     After initialization is empty
     Is constructed by adding nodes with its feature value
+    IN: integer corresponds to features number(n)
+    OUT: dict:
+            key: index of feature(from 0 to n)
+            value: list of tuples: (node_index, feature_value)
     """
     class NodeFeatureValue:
         def __init__(self, i, v):
