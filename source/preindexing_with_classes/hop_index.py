@@ -52,7 +52,7 @@ class HopIndex:
 
 
 if __name__ == "__main__":
-    from source.preindexing.feature_index import FeatureIndex
+    from source.preindexing_with_classes.feature_index import FeatureIndex
     fi = FeatureIndex(3)
     fi.add_element(0, (1, 0.6))
     fi.add_element(1, (2, 0.1))
