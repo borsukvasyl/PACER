@@ -1,6 +1,6 @@
-from source.preindexing.graph_interface import GraphInterface
-from source.preindexing.feature_index import FeatureIndex
-from source.preindexing.hop_index import HopIndex
+from source.preindexing_with_classes.graph_interface import GraphInterface
+from source.preindexing_with_classes.feature_index import FeatureIndex
+from source.preindexing_with_classes.hop_index import HopIndex
 
 
 class Indexator:
