@@ -70,7 +70,7 @@ class PACER(object):
                     continue
 
                 # checking whether gain of this route is valid (pruning-2)
-                if route.cost_to_node(self.HIQ, self.Q.get_finish()) < self.Q.get_budget():
+                if route.cost_to_node(self.HIQ, self.Q.get_finish()) <= self.Q.get_budget():
                     UP = self.pruning2(route)
                     if compact_state.gain + UP >= self._get_topk_kth_element():
                         compact_state.add_route(route)
