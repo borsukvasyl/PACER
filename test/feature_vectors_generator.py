@@ -17,17 +17,17 @@ class FeatureVectorsGenerator:
         return features_dict
 
     def generate_feature_vector(self):
-        feature_values = [0.0] * 3 + list(map(lambda x: round(float(x), 1),
+        feature_values = [0.0] * self._number_of_features + list(map(lambda x: round(float(x), 1),
                                                                    np.arange(0.1, 1.1, 0.1)))
         random.shuffle(feature_values)
 
         feature_vector = []
-        number_of_zeros = 0
+        number_of_zeros = self._number_of_features
         for feature_index in range(self._number_of_features):
-            feature_values += [0.0] * (number_of_zeros * 3)
-            feature_value = random.choice(self._feature_values)
-            if feature_value == 0.0:
-                number_of_zeros += 1
+            feature_value = random.choice(feature_values)
+            if feature_value != 0.0:
+                feature_values += [0.0] * number_of_zeros
+                number_of_zeros *= 2
             feature_vector.append(feature_value)
         return tuple(feature_vector)
 
