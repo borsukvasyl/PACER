@@ -1,58 +1,3 @@
-"""
-import matplotlib.pyplot as plt
-import networkx as nx
-
-G = nx.Graph()
-
-G.add_edge('a', 'b', weight=0.6)
-G.add_edge('a', 'c', weight=0.2)
-G.add_edge('c', 'd', weight=0.1)
-G.add_edge('c', 'e', weight=0.7)
-G.add_edge('c', 'f', weight=0.9)
-G.add_edge('a', 'd', weight=0.3)
-
-pos = nx.spring_layout(G)  # positions for all nodes
-#################################################################################
-route = ["a", "c", "d"]
-
-route_edges = [(u, v) for (u, v, d) in G.edges(data=True) if u in route and v in route]
-edges = [(u, v) for (u, v, d) in G.edges(data=True) if (u, v) not in route_edges]
-
-# nodes
-nx.draw_networkx_nodes(G, pos, node_size=700)
-
-# edges
-nx.draw_networkx_edges(G, pos, edgelist=edges, width=6)
-nx.draw_networkx_edges(G, pos, edgelist=route_edges, width=6, alpha=0.5, edge_color='b', style='dashed')
-
-# labels
-nx.draw_networkx_labels(G, pos, font_size=20, font_family='sans-serif')
-
-print(pos)
-plt.axis('off')
-plt.savefig("route1.png")  # save as png
-plt.show()  # display
-#################################################################################
-route = ["e", "c", "f"]
-
-route_edges = [(u, v) for (u, v, d) in G.edges(data=True) if u in route and v in route]
-edges = [(u, v) for (u, v, d) in G.edges(data=True) if (u, v) not in route_edges]
-
-# nodes
-nx.draw_networkx_nodes(G, pos, node_size=700)
-
-# edges
-nx.draw_networkx_edges(G, pos, edgelist=edges, width=6)
-nx.draw_networkx_edges(G, pos, edgelist=route_edges, width=6, alpha=0.5, edge_color='b', style='dashed')
-
-# labels
-nx.draw_networkx_labels(G, pos, font_size=20, font_family='sans-serif')
-
-print(pos)
-plt.axis('off')
-plt.savefig("route2.png")  # save as png
-plt.show()  # display
-"""
 import matplotlib.pyplot as plt
 import networkx as nx
 
@@ -61,16 +6,55 @@ class GraphDrawer(object):
     @staticmethod
     def draw_routes(adjacency_matrix, routes, filename=None):
         graph = GraphDrawer.initialize_graph(adjacency_matrix)
-
+        positions = nx.spring_layout(graph, iterations=50)
+        for i in range(len(routes)):
+            route_filename = None
+            if filename:
+                route_filename = "{}{}.png".format(filename, i + 1)
+            GraphDrawer.draw_route(graph, positions, routes[i], filename=route_filename)
 
     @staticmethod
     def initialize_graph(adjacency_matrix):
         graph = nx.Graph()
+        for i in range(len(adjacency_matrix)):
+            for j in range(len(adjacency_matrix) - i):
+                graph.add_edge(i, i + j + 1, weight=adjacency_matrix[i][j])
         return graph
 
     @staticmethod
-    def draw_route(graph, route, filename=None):
-        pass
+    def draw_route(graph, positions, route, filename=None):
+        # nodes
+        blue_nodes = [route[0].get_first_node(), route[0].get_last_node()]
+        red_nodes = [node for node in graph.nodes() if node not in blue_nodes]
+        print(blue_nodes, red_nodes)
+        nx.draw_networkx_nodes(graph, positions, nodelist=blue_nodes,
+                               node_size=400, node_color='b')
+        nx.draw_networkx_nodes(graph, positions, nodelist=red_nodes,
+                               node_size=400, node_color='r')
+
+        # edges
+        route_edges = [(route[0].route[i], route[0].route[i + 1]) for i in range(len(route[0].route) - 1)]
+        edges = [(u, v) for (u, v, d) in graph.edges(data=True) if
+                 not ((u, v) in route_edges or (v, u) in route_edges)]
+        nx.draw_networkx_edges(graph, positions, edgelist=edges, width=1)
+        nx.draw_networkx_edges(graph, positions, edgelist=route_edges, width=3,
+                               alpha=0.5, edge_color='b')
+
+        # labels
+        nx.draw_networkx_labels(graph, positions, font_size=10, font_family='sans-serif')
+
+        plt.axis('off')
+        if filename:
+            plt.savefig(filename)  # save as png
+        plt.show()  # display
+
+    @staticmethod
+    def _check_uv_is_in_route(u, v, route):
+        if u not in route[0].route:
+            return False
+        if v in route[0].route and route[0].route.index(v) == route[0].route.index(u) + 1:
+            return True
+        return False
 
 
 if __name__ == "__main__":
@@ -87,7 +71,7 @@ if __name__ == "__main__":
     fi = {0: (0.4, 0.7, 0.0, 0.5), 1: (0.0, 0.3, 0.0, 0.0), 2: (0.0, 0.0, 0.5, 0.0),
           3: (0.0, 0.7, 0.5, 0.1), 4: (1.0, 0.0, 0.1, 0.0), 5: (0.0, 0.6, 0.8, 0.0)}
 
-    query = Query(0, 3, 120, preference=tuple(0.5 for _ in range(4)),
+    query = Query(0, 3, 79, preference=tuple(0.5 for _ in range(4)),
                   teta=tuple(0 for _ in range(4)))
 
     ind = Indexator(fi, AdjacencyMatrix(5, matrix=am), query)
@@ -97,7 +81,8 @@ if __name__ == "__main__":
 
     pc = PACER(query, VQ, FIQ, HIQ)
     pq = pc.find_topk_routes()
-    routes = [pq.delete() for _ in range(pq.size())]
+    pq_routes = [pq.delete() for _ in range(pq.size())]
+    routes = [(pq_route[0].extend_route(HIQ, query.get_finish()), pq_route[1]) for pq_route in pq_routes]
     print(routes)
 
-    GraphDrawer.draw_routes(am, routes)
+    GraphDrawer.draw_routes(am, routes, filename="route")
