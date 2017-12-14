@@ -23,6 +23,9 @@ class Route(object):
     def get_last_node(self):
         return self.route[-1]
 
+    def get_first_node(self):
+        return self.route[0]
+
     def extend_route(self, HIQ,  node):
         new_cost = self.cost_to_node(HIQ, node)
         new_route = self.route + [node]
