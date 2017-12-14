@@ -38,9 +38,15 @@ class DataGenerator:
             feature_vectors = features_generator.generate_feature_vectors()
             DataGenerator.write_data(str(i), graph, feature_vectors)
 
+            # generate user query
+            nodes_list = set(range(number_of_nodes))
+            x = random.choice(nodes_list)
+            y = random.choice(nodes_list.difference({x}))
+
+
     @staticmethod
     def write_data(filename, matrix, list_of_vectors):
-        with open("data" + filename, 'w') as file:
+        with open("case" + filename, 'w') as file:
             file.write(str(matrix) + '\n')
             file.write(str(list_of_vectors))
 
