@@ -1,17 +1,30 @@
 # PACER
 #### Constructing Top-k Routes with Personalized Submodular Maximization of POI (point of interest) Features
-|               Graph                 |              Result1                 |              Result2                 |
-|:-----------------------------------:|:------------------------------------:|:------------------------------------:|
-| ![Map](docs/images/1/graph.png "1") | ![Map](docs/images/1/route1.png "2") | ![Map](docs/images/1/route2.png "3") |
+|              Graph              |             Result1              |              Result2             |
+|:-------------------------------:|:--------------------------------:|:--------------------------------:|
+| ![Map](docs/images/1/graph.png) | ![Map](docs/images/1/route1.png) | ![Map](docs/images/1/route2.png) |
 ***
-### Problem description
+## Problem description
 We are given a collection of POIs (points of interest) with rated features and travelling costs between points. User wants to find top k routes from start to destination points, that maximally satisfy feature preferences and it's cost is not bigger than cost budget.
 ***
-### Data
+## Data
+Data is generated randomly ...
 ***
-### Research
+## Research
+### Graph #1
+|              Graph1              |              Result1             |
+|:--------------------------------:|:--------------------------------:|
+| ![Map](docs/images/1/graph.png)  | ![Map](docs/images/1/route1.png) |
+|              Result2             |              Result3             |
+| ![Map](docs/images/1/route2.png) | ![Map](docs/images/1/route3.png) |
+### Graph #2
+|              Graph2              |              Result1             |
+|:--------------------------------:|:--------------------------------:|
+| ![Map](docs/images/2/graph.png)  | ![Map](docs/images/2/route1.png) |
+|              Result2             |              Result3             |
+| ![Map](docs/images/2/route2.png) | ![Map](docs/images/2/route3.png) |
 ***
-### Structure
+## Structure
 ***
 
 [resource](https://arxiv.org/pdf/1710.03852.pdf)
