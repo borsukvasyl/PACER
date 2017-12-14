@@ -1,5 +1,5 @@
 # PACER
-#### Constructing Top-k Routes with Personalized Submodular Maximization of POI (point of interest) Features
+### Constructing Top-k Routes with Personalized Submodular Maximization of POI (point of interest) Features
 |              Graph              |             Result1              |              Result2             |
 |:-------------------------------:|:--------------------------------:|:--------------------------------:|
 | ![Map](docs/images/1/graph.png) | ![Map](docs/images/1/route1.png) | ![Map](docs/images/1/route2.png) |
@@ -12,12 +12,15 @@ Data is generated randomly ...
 ***
 ## Research
 ### Graph #1
+
 |              Graph1              |              Result1             |
 |:--------------------------------:|:--------------------------------:|
 | ![Map](docs/images/1/graph.png)  | ![Map](docs/images/1/route1.png) |
 |              Result2             |              Result3             |
 | ![Map](docs/images/1/route2.png) | ![Map](docs/images/1/route3.png) |
+
 ### Graph #2
+
 |              Graph2              |              Result1             |
 |:--------------------------------:|:--------------------------------:|
 | ![Map](docs/images/2/graph.png)  | ![Map](docs/images/2/route1.png) |
