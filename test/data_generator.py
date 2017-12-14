@@ -12,9 +12,9 @@ class DataGenerator:
     """
     # Bounds:
     # Number of nodes
-    N = (5, 20)
+    N = (5, 8)
     # Number of features
-    H = (2, 10)
+    H = (2, 6)
 
     @staticmethod
     def generate(number_of_cases):
@@ -23,7 +23,6 @@ class DataGenerator:
         base_dir = os.getcwd()
         shutil.rmtree(base_dir + "/" + DATA_FOLDER, ignore_errors=True)
         os.mkdir(DATA_FOLDER)
-        os.chdir(os.getcwd() + "/" + DATA_FOLDER)
 
         for i in range(number_of_cases):
             # generate graph
@@ -55,7 +54,7 @@ class DataGenerator:
 
     @staticmethod
     def write_data(filename, nodes_number, features_number, matrix, list_of_vectors, query):
-        with open("case" + filename, 'w') as file:
+        with open("data/case" + filename, 'w') as file:
             file.write(str(nodes_number) + " " + str(features_number) + '\n')
             file.write(str(matrix) + '\n')
             file.write(str(list_of_vectors) + '\n')
