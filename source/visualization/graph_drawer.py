@@ -4,14 +4,16 @@ import networkx as nx
 
 class GraphDrawer(object):
     @staticmethod
-    def draw_routes(adjacency_matrix, routes, filename=None):
+    def draw_routes(adjacency_matrix, routes, foldername=None):
         graph = GraphDrawer.initialize_graph(adjacency_matrix)
         positions = nx.spring_layout(graph, iterations=50)
 
+        GraphDrawer.draw_graph(graph, positions, filename="{}/graph.png".format(foldername))
+
         for i in range(len(routes)):
             route_filename = None
-            if filename:
-                route_filename = "{}{}.png".format(filename, i + 1)
+            if foldername:
+                route_filename = "{}/route{}.png".format(foldername, i + 1)
             GraphDrawer.draw_route(graph, positions, routes[i], filename=route_filename)
 
     @staticmethod
@@ -19,8 +21,28 @@ class GraphDrawer(object):
         graph = nx.Graph()
         for i in range(len(adjacency_matrix)):
             for j in range(len(adjacency_matrix) - i):
-                graph.add_edge(i, i + j + 1, weight=adjacency_matrix[i][j])
+                if adjacency_matrix[i][j]:
+                    graph.add_edge(i, i + j + 1, weight=adjacency_matrix[i][j])
         return graph
+
+    @staticmethod
+    def draw_graph(graph, positions, filename=None):
+        # nodes
+        nx.draw_networkx_nodes(graph, positions, nodelist=graph.nodes(),
+                               node_size=400, node_color='r')
+
+        # edges
+        edges = [(u, v) for (u, v, d) in graph.edges(data=True)]
+        nx.draw_networkx_edges(graph, positions, edgelist=edges, width=1)
+
+        # labels
+        nx.draw_networkx_labels(graph, positions, font_size=10, font_family='sans-serif')
+        nx.draw_networkx_edge_labels(graph, positions, font_size=8, edge_labels=nx.get_edge_attributes(graph, "weight"))
+
+        plt.axis('off')
+        if filename:
+            plt.savefig(filename)  # save as png
+        plt.show()  # display
 
     @staticmethod
     def draw_route(graph, positions, route, filename=None):
@@ -45,6 +67,8 @@ class GraphDrawer(object):
         nx.draw_networkx_labels(graph, positions, font_size=10, font_family='sans-serif')
 
         plt.axis('off')
+        plt.figtext(.02, .02, "route: {}\ncost: {}\ngain: {}".format(" -> ".join(map(str, route[0].route)),
+                    route[0].cost, round(route[1], 4)))
         if filename:
             plt.savefig(filename)  # save as png
         plt.show()  # display

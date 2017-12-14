@@ -15,11 +15,13 @@ class Main:
     Read data, run PACER
     """
     @staticmethod
-    def main():
-        # generate_data
-        NUMBER_OF_TESTCASES = 3
+    def main(generate_data=False):
         NUMBER_OF_ROUTES = 3
-        DataGenerator.generate(NUMBER_OF_TESTCASES)
+
+        # generate_data
+        if generate_data:
+            NUMBER_OF_TESTCASES = 3
+            DataGenerator.generate(NUMBER_OF_TESTCASES)
 
         shutil.rmtree("result" + "/", ignore_errors=True)
         os.mkdir("result")
@@ -43,7 +45,7 @@ class Main:
             print(routes)
 
             os.mkdir("result/{}".format(data_file))
-            GraphDrawer.draw_routes(graph_matrix, filename="result/route")
+            GraphDrawer.draw_routes(graph_matrix, routes, foldername="result/{}".format(data_file))
 
     @staticmethod
     def read_data(filename):
