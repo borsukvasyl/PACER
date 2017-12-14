@@ -65,7 +65,8 @@ class PACER(object):
                     continue
                 route = dominating_route.extend_route(self.HIQ, j)
 
-                if self.Q.get_finish() not in self.HIQ[route.get_last_node()]:
+                if not ((self.Q.get_finish() in self.HIQ[route.get_last_node()]) or
+                        (route.get_last_node() in self.HIQ[self.Q.get_finish()])):
                     unfinished_routes.append(route)
                     continue
 

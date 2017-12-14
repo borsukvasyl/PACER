@@ -17,3 +17,6 @@ class CompactState(object):
         :return: None
         """
         self.routes.append(route)
+
+    def __repr__(self):
+        return str(self.routes)

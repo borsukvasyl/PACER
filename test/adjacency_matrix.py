@@ -4,12 +4,15 @@ import random
 class AdjacencyMatrix:
     MAX_COST = 100
 
-    def __init__(self, n):
+    def __init__(self, n, matrix=None):
         """
         :param n: number of nodes
         """
         self._size = n
-        self._matrix = [[] for _ in range(n - 1)]
+        if matrix is None:
+            self._matrix = [[] for _ in range(n - 1)]
+        else:
+            self._matrix = matrix
 
     def __len__(self):
         return self._size

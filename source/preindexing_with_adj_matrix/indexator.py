@@ -45,7 +45,8 @@ class Indexator:
 
         return fiq, vq
 
-    def find_hiq(self, vq, budget):
+    def find_hiq(self, vq):
+        budget = self._query.get_budget()
         hiq = dict.fromkeys(vq)
         for key in hiq:
             hiq[key] = {}
