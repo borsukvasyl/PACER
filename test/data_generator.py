@@ -53,11 +53,12 @@ class DataGenerator:
             ALPHA = 1
             query = [x, y, budget, user_preference_vector, filtering_vector, ALPHA]
 
-            DataGenerator.write_data(str(i), graph, feature_vectors, query)
+            DataGenerator.write_data(str(i), number_of_nodes, number_of_features, graph, feature_vectors, query)
 
     @staticmethod
-    def write_data(filename, matrix, list_of_vectors, query):
+    def write_data(filename, nodes_number, features_number, matrix, list_of_vectors, query):
         with open("case" + filename, 'w') as file:
+            file.write(str(nodes_number) + " " + str(features_number) + '\n')
             file.write(str(matrix) + '\n')
             file.write(str(list_of_vectors) + '\n')
             file.write(str(query))
