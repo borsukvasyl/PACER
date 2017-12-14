@@ -33,6 +33,7 @@ class AdjacencyMatrix:
             for _ in range(i + 1, self._size):
                 random_cost = random.randrange(1, AdjacencyMatrix.MAX_COST)
                 self._matrix[i].append(random_cost)
+        return self._matrix
 
 
 if __name__ == "__main__":
