@@ -44,8 +44,15 @@ class Main:
             routes = [(pq_route[0].extend_route(HIQ, Q.get_finish()), pq_route[1]) for pq_route in pq_routes]
             print(routes)
 
+            description = "\n\nstart: {};  finish: {};  budget: {};  preference:  {}\n".format(query[0], query[1],
+                                                                                               query[2], query[3])
+            feature_lst = ["{}: {}".format(i, features_dict[i]) for i in features_dict]
+            for i in range(1, len(feature_lst)+1):
+                description += feature_lst[i-1]
+                description += ";   " if i % 3 else "\n"
+
             os.mkdir("result/{}".format(data_file))
-            GraphDrawer.draw_routes(graph_matrix, routes, foldername="result/{}".format(data_file))
+            GraphDrawer.draw_routes(graph_matrix, routes, description, foldername="result/{}".format(data_file))
 
     @staticmethod
     def read_data(filename):
@@ -59,4 +66,4 @@ class Main:
 
 
 if __name__ == "__main__":
-    Main.main()
+    Main.main(True)

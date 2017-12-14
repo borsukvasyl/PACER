@@ -4,11 +4,11 @@ import networkx as nx
 
 class GraphDrawer(object):
     @staticmethod
-    def draw_routes(adjacency_matrix, routes, foldername=None):
+    def draw_routes(adjacency_matrix, routes, graph_description, foldername=None):
         graph = GraphDrawer.initialize_graph(adjacency_matrix)
         positions = nx.spring_layout(graph, iterations=50)
 
-        GraphDrawer.draw_graph(graph, positions, filename="{}/graph.png".format(foldername))
+        GraphDrawer.draw_graph(graph, positions, graph_description, filename="{}/graph.png".format(foldername))
 
         for i in range(len(routes)):
             route_filename = None
@@ -26,7 +26,7 @@ class GraphDrawer(object):
         return graph
 
     @staticmethod
-    def draw_graph(graph, positions, filename=None):
+    def draw_graph(graph, positions, graph_description, filename=None):
         # nodes
         nx.draw_networkx_nodes(graph, positions, nodelist=graph.nodes(),
                                node_size=400, node_color='r')
@@ -39,6 +39,7 @@ class GraphDrawer(object):
         nx.draw_networkx_labels(graph, positions, font_size=10, font_family='sans-serif')
         nx.draw_networkx_edge_labels(graph, positions, font_size=8, edge_labels=nx.get_edge_attributes(graph, "weight"))
 
+        plt.figtext(.02, .02, graph_description)
         plt.axis('off')
         if filename:
             plt.savefig(filename)  # save as png

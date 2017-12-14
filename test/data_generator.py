@@ -14,7 +14,7 @@ class DataGenerator:
     # Number of nodes
     N = (5, 8)
     # Number of features
-    H = (2, 6)
+    H = (2, 4)
 
     @staticmethod
     def generate(number_of_cases):
