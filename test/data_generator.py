@@ -1,6 +1,7 @@
 import shutil
 import os
 import random
+import numpy as np
 from test.adjacency_matrix import AdjacencyMatrix
 from test.feature_vectors_generator import FeatureVectorsGenerator
 
@@ -36,19 +37,30 @@ class DataGenerator:
             number_of_features = random.randint(DataGenerator.H[0], DataGenerator.H[1])
             features_generator = FeatureVectorsGenerator(number_of_nodes, number_of_features)
             feature_vectors = features_generator.generate_feature_vectors()
-            DataGenerator.write_data(str(i), graph, feature_vectors)
 
             # generate user query
-            nodes_list = set(range(number_of_nodes))
+            nodes_list = list(range(number_of_nodes))
             x = random.choice(nodes_list)
-            y = random.choice(nodes_list.difference({x}))
+            y = random.choice(list(set(nodes_list).difference({x})))
+            edge_number = (number_of_nodes * (number_of_nodes - 1)) // 2
+            budget = random.randint(edge_number * 5, edge_number * 20)
+            user_preference_vector = tuple([random.choice(list(map(lambda x: round(float(x), 1),
+                                                             np.arange(0.0, 1.1, 0.1))))
+                                      for _ in range(number_of_features)])
+            filtering_vector = tuple([random.choice(list(map(lambda x: round(float(x), 1),
+                                                       np.arange(0.0, 0.6, 0.1))))
+                                for _ in range(number_of_features)])
+            ALPHA = 1
+            query = [x, y, budget, user_preference_vector, filtering_vector, ALPHA]
 
+            DataGenerator.write_data(str(i), graph, feature_vectors, query)
 
     @staticmethod
-    def write_data(filename, matrix, list_of_vectors):
+    def write_data(filename, matrix, list_of_vectors, query):
         with open("case" + filename, 'w') as file:
             file.write(str(matrix) + '\n')
-            file.write(str(list_of_vectors))
+            file.write(str(list_of_vectors) + '\n')
+            file.write(str(query))
 
 
 if __name__ == "__main__":
