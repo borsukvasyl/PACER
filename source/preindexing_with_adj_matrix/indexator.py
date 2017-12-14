@@ -79,5 +79,5 @@ if __name__ == "__main__":
     indexator = Indexator(featute_dict, matrix, query)
     FIQ, VQ = indexator.find_fiq_and_vq()
     budget = 65
-    HIQ = indexator.find_hiq(VQ, budget)
+    HIQ = indexator.find_hiq(VQ)
     print(HIQ)

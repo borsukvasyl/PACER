@@ -16,10 +16,8 @@ class DataGenerator:
     # Number of features
     H = (2, 10)
 
-    def __init__(self, k):
-        self._number_of_cases = k
-
-    def generate(self):
+    @staticmethod
+    def generate(number_of_cases):
         # remove previous folder of data and create new
         DATA_FOLDER = "data/"
         base_dir = os.getcwd()
@@ -27,7 +25,7 @@ class DataGenerator:
         os.mkdir(DATA_FOLDER)
         os.chdir(os.getcwd() + "/" + DATA_FOLDER)
 
-        for i in range(self._number_of_cases):
+        for i in range(number_of_cases):
             # generate graph
             number_of_nodes = random.randint(DataGenerator.N[0], DataGenerator.N[1])
             matrix = AdjacencyMatrix(number_of_nodes)
@@ -65,5 +63,4 @@ class DataGenerator:
 
 
 if __name__ == "__main__":
-    data_gen = DataGenerator(2)
-    data_gen.generate()
+    DataGenerator.generate(2)
