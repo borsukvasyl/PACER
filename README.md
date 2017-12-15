@@ -10,6 +10,10 @@
 We are given a collection of POIs (points of interest) with rated features and travelling costs between points. User wants to find top k routes from start to destination points, that maximally satisfy feature preferences and it's cost is not bigger than cost budget.
 ***
 ## Data
+|             Graph1              |              Graph2              |               Graph3             |
+|:-------------------------------:|:--------------------------------:|:--------------------------------:|
+| ![Map](docs/images/2/graph.png) | ![Map](docs/images/3/route1.png) | ![Map](docs/images/4/route2.png) |
+
 Data is generated randomly ...
 ***
 ## Research
@@ -32,6 +36,16 @@ Data is generated randomly ...
 | ![Map](docs/images/3/route2.png) | ![Map](docs/images/3/route3.png) |
 |              Route4              |              Route5              |
 | ![Map](docs/images/3/route4.png) | ![Map](docs/images/3/route5.png) |
+
+### Graph #3
+
+|              Graph3              |              Route1              |
+|:--------------------------------:|:--------------------------------:|
+| ![Map](docs/images/4/graph.png)  | ![Map](docs/images/4/route1.png) |
+|              Route2              |              Route3              |
+| ![Map](docs/images/4/route2.png) | ![Map](docs/images/4/route3.png) |
+|              Route4              |              Route5              |
+| ![Map](docs/images/4/route4.png) | ![Map](docs/images/4/route5.png) |
 ***
 ## Structure
 ***
