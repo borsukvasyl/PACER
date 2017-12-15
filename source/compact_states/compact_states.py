@@ -23,4 +23,8 @@ class CompactStates(object):
         return self._compact_states[nodes]
 
     def __str__(self):
+        """
+        Returns string representation of CompactStates
+        :return: string representation
+        """
         return str(self._compact_states)

@@ -3,6 +3,7 @@ class CompactState(object):
         """
         Initializing compact state.
         :param gain: gain of points
+        :param routes: initial routes
         """
         self.gain = gain
         if routes is None:
@@ -19,4 +20,8 @@ class CompactState(object):
         self.routes.append(route)
 
     def __repr__(self):
+        """
+        Returns string representation of CompactState
+        :return: string representation
+        """
         return str(self.routes)
