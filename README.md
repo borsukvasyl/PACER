@@ -12,7 +12,7 @@ We are given a collection of POIs (points of interest) with rated features and t
 ## Data
 |             Graph1              |              Graph2             |              Graph3             |
 |:-------------------------------:|:-------------------------------:|:-------------------------------:|
-| ![Map](docs/images/2/graph.png) | ![Map](docs/images/3/graph.png) | ![Map](docs/images/4/graph.png) |
+| ![Map](docs/images/2/graph.png) | ![Map](docs/images/3/graph.png) | ![Map](docs/images/1/graph.png) |
 
 Data is generated randomly ...
 ***
@@ -41,11 +41,11 @@ Data is generated randomly ...
 
 |              Graph3              |              Route1              |
 |:--------------------------------:|:--------------------------------:|
-| ![Map](docs/images/4/graph.png)  | ![Map](docs/images/4/route1.png) |
+| ![Map](docs/images/1/graph.png)  | ![Map](docs/images/1/route1.png) |
 |              Route2              |              Route3              |
-| ![Map](docs/images/4/route2.png) | ![Map](docs/images/4/route3.png) |
+| ![Map](docs/images/1/route2.png) | ![Map](docs/images/1/route3.png) |
 |              Route4              |              Route5              |
-| ![Map](docs/images/4/route4.png) | ![Map](docs/images/4/route5.png) |
+| ![Map](docs/images/1/route4.png) | ![Map](docs/images/1/route5.png) |
 ***
 ## Structure
 ***
