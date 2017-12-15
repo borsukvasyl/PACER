@@ -55,10 +55,9 @@ class Indexator:
             if node_index in vq:
                 hiq.get(node_index)[node_index] = 0
                 for adjacent_node_index in range(node_index + 1, len(self.adjacency_matrix)):
-                    if adjacent_node_index in vq:
-                        cost = self.adjacency_matrix.get_value(node_index, adjacent_node_index)
-                        if cost <= budget:
-                            hiq.get(node_index)[adjacent_node_index] = cost
+                    cost = self.adjacency_matrix.get_value(node_index, adjacent_node_index)
+                    if adjacent_node_index in vq and cost != 0 and cost <= budget:
+                        hiq.get(node_index)[adjacent_node_index] = cost
         return hiq
 
 

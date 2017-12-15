@@ -16,12 +16,13 @@ class Main:
     """
     @staticmethod
     def main(generate_data=False):
-        NUMBER_OF_ROUTES = 3
+        NUMBER_OF_TESTCASES = 3
+        GENERATE_COMPLETE_GRAPH = True
+        NUMBER_OF_ROUTES = 5
 
         # generate_data
         if generate_data:
-            NUMBER_OF_TESTCASES = 3
-            DataGenerator.generate(NUMBER_OF_TESTCASES)
+            DataGenerator.generate(NUMBER_OF_TESTCASES, is_complete=GENERATE_COMPLETE_GRAPH)
 
         shutil.rmtree("result" + "/", ignore_errors=True)
         os.mkdir("result")
@@ -30,6 +31,7 @@ class Main:
         data_dir = os.listdir(os.getcwd() + "/data")
         for data_file in data_dir:
             node_number, features_number, graph_matrix, features_dict, query = Main.read_data("data/" + data_file)
+            print(graph_matrix)
 
             Q = Query(*query)
 

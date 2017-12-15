@@ -17,7 +17,7 @@ class DataGenerator:
     H = (2, 4)
 
     @staticmethod
-    def generate(number_of_cases):
+    def generate(number_of_cases, is_complete=True):
         # remove previous folder of data and create new
         DATA_FOLDER = "data/"
         base_dir = os.getcwd()
@@ -28,7 +28,7 @@ class DataGenerator:
             # generate graph
             number_of_nodes = random.randint(DataGenerator.N[0], DataGenerator.N[1])
             matrix = AdjacencyMatrix(number_of_nodes)
-            graph = matrix.generate_random()
+            graph = matrix.generate_random(is_complete=is_complete)
 
             # generate list of feature vectors
             number_of_features = random.randint(DataGenerator.H[0], DataGenerator.H[1])

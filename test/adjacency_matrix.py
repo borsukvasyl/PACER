@@ -31,11 +31,14 @@ class AdjacencyMatrix:
         except IndexError:
             print("You are doing smth wrong")
 
-    def generate_random(self):
+    def generate_random(self, is_complete=True):
         for i in range(self._size):
             for _ in range(i + 1, self._size):
                 random_cost = random.randrange(1, AdjacencyMatrix.MAX_COST)
-                self._matrix[i].append(random_cost)
+                if is_complete:
+                    self._matrix[i].append(random_cost)
+                else:
+                    self._matrix[i].append(random_cost if random.randrange(0, 3) else 0)
         return self._matrix
 
 
