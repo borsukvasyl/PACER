@@ -1,13 +1,12 @@
 import os
 import shutil
 
-from test.data_generator import DataGenerator
-from source.preindexing_with_adj_matrix.indexator import Indexator
-from test.adjacency_matrix import AdjacencyMatrix
 from source.pacer import PACER
+from source.preindexing.adjacency_matrix import AdjacencyMatrix
+from source.preindexing.indexator import Indexator
 from source.user_query import Query
-
 from source.visualization.graph_drawer import GraphDrawer
+from test.data_generator import DataGenerator
 
 
 class Main:

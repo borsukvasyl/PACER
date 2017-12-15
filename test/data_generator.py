@@ -1,8 +1,10 @@
-import shutil
 import os
 import random
+import shutil
+
 import numpy as np
-from test.adjacency_matrix import AdjacencyMatrix
+
+from source.preindexing.adjacency_matrix import AdjacencyMatrix
 from test.feature_vectors_generator import FeatureVectorsGenerator
 
 

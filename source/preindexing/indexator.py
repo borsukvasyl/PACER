@@ -1,15 +1,19 @@
 class Indexator:
-    def __init__(self, lst, matrix, query):
+    def __init__(self, features, matrix, query):
         """
-
-        :param lst: dict(k: index, v: feature_vector)
+        Indexator initialization.
+        :param features: dict(feature index: feature vector)
         :param matrix: class AdjacencyMatrix
         """
-        self.list_of_node_features = lst
+        self.list_of_node_features = features
         self.adjacency_matrix = matrix
         self._query = query
 
     def find_fiq_and_vq(self):
+        """
+        Calculates FIQ and VQ for given user query and features.
+        :return: FIQ and VQ
+        """
         start = self._query.get_start()
         finish = self._query.get_finish()
         feature_vector = self._query.get_preference()
@@ -46,6 +50,11 @@ class Indexator:
         return fiq, vq
 
     def find_hiq(self, vq):
+        """
+        Calculates HIQ for given user query and VQ.
+        :param vq: set of POIs
+        :return: HIQ
+        """
         budget = self._query.get_budget()
         hiq = dict.fromkeys(vq)
         for key in hiq:
@@ -62,7 +71,7 @@ class Indexator:
 
 
 if __name__ == "__main__":
-    from test.adjacency_matrix import AdjacencyMatrix
+    from source.preindexing.adjacency_matrix import AdjacencyMatrix
     from source.user_query import Query
 
     n = 6
@@ -74,7 +83,8 @@ if __name__ == "__main__":
                     2: (0.3, 0.4, 0.8),
                     3: (0.7, 0.0, 0.0),
                     4: (0.0, 0.2, 0.7),
-                    5: (0.0, 0.1, 0.0),}
+                    5: (0.0, 0.1, 0.0),
+                    }
     indexator = Indexator(featute_dict, matrix, query)
     FIQ, VQ = indexator.find_fiq_and_vq()
     budget = 65
