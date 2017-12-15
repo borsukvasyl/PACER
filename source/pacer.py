@@ -76,7 +76,7 @@ class PACER(object):
                     if compact_state.gain + UP >= self._get_topk_kth_element():
                         compact_state.add_route(route)
 
-            self.updata_topk(compact_state)
+            self.update_topk(compact_state)
 
             for route in unfinished_routes:
                 compact_state.add_route(route)
@@ -262,10 +262,19 @@ class PACER(object):
         return (incoming_travel_cost + outcoming_travel_cost) / 2 + 1.0
 
     def _get_topk_kth_element(self):
+        """
+        Return k'th element priority in topK.
+        :return: priority
+        """
         if self.topk.size() < self.k:
             return 0
         return self.topk.get_by_index_priority(self.k - 1)[1]
 
-    def updata_topk(self, compact_state):
+    def update_topk(self, compact_state):
+        """
+        Adds compact state to topK.
+        :param compact_state: CompactState object
+        :return: None
+        """
         for route in compact_state.routes:
             self.topk.put((route, compact_state.gain))
