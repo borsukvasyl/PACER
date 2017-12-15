@@ -20,6 +20,13 @@ class DataGenerator:
 
     @staticmethod
     def generate(number_of_cases, is_complete=True):
+        """
+        Generates random adjacency matrix, feature vectors for POIs and user query.
+        Generated data is saved if folder "data"
+        :param number_of_cases: number of generating processes
+        :param is_complete: if is set to True generates complete graph adjacency matrix
+        :return: None
+        """
         # remove previous folder of data and create new
         DATA_FOLDER = "data/"
         base_dir = os.getcwd()
@@ -56,6 +63,16 @@ class DataGenerator:
 
     @staticmethod
     def write_data(filename, nodes_number, features_number, matrix, list_of_vectors, query):
+        """
+        Saves data in "data" folder
+        :param filename: filename
+        :param nodes_number: number of nodes
+        :param features_number: number of features
+        :param matrix: adjacency matrix
+        :param list_of_vectors: feature vectors
+        :param query: user query
+        :return: None
+        """
         with open("data/case" + filename, 'w') as file:
             file.write(str(nodes_number) + " " + str(features_number) + '\n')
             file.write(str(matrix) + '\n')

@@ -15,6 +15,11 @@ class Main:
     """
     @staticmethod
     def main(generate_data=False):
+        """
+        Runs PACER and displays results.
+        :param generate_data: if is set to True generates new data
+        :return: None
+        """
         NUMBER_OF_TESTCASES = 3
         GENERATE_COMPLETE_GRAPH = True
         NUMBER_OF_ROUTES = 5
@@ -57,6 +62,11 @@ class Main:
 
     @staticmethod
     def read_data(filename):
+        """
+        Reads data from file.
+        :param filename: filename
+        :return: number of nodes, number of features, adjacency matrix, feature vectors, user query
+        """
         with open(filename) as file:
             content = file.readlines()
             node_number, features_number = tuple(map(int, content[0].split()))

@@ -3,20 +3,36 @@ import numpy as np
 
 
 class FeatureVectorsGenerator:
+    """
+    Generates feature vectors.
+    """
     def __init__(self, n, h):
+        """
+        FeatureVectorsGenerator initialization.
+        :param n: number of nodes in graph
+        :param h: number of features
+        """
         self._number_of_nodes = n
         self._number_of_features = h
         self._feature_values = [0.0] * 3 + list(map(lambda x: round(float(x), 1),
-                                                                   np.arange(0.1, 1.1, 0.1)))
+                                                np.arange(0.1, 1.1, 0.1)))
         random.shuffle(self._feature_values)
 
     def generate_feature_vectors(self):
+        """
+        Generates feature vectors.
+        :return: feature vectors
+        """
         features_dict = {}
         for node_index in range(self._number_of_nodes):
             features_dict[node_index] = self.generate_feature_vector()
         return features_dict
 
     def generate_feature_vector(self):
+        """
+        Generates feature vector.
+        :return: tuple(feature vector)
+        """
         feature_values = [0.0] * self._number_of_features + list(map(lambda x: round(float(x), 1),
                                                                    np.arange(0.1, 1.1, 0.1)))
         random.shuffle(feature_values)
