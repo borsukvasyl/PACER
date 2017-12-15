@@ -33,4 +33,5 @@ Data is generated randomly ...
 [resource](https://arxiv.org/pdf/1710.03852.pdf)
 
 [Vasyl Borsuk](https://github.com/borsukvasyl) – borsuk@ucu.edu.ua
+
 [Ivan Kosarevych](https://github.com/IvKosar) - kosarevych@ucu.edu.ua
